@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:5000/api",
+  baseURL: "https://book-bazaar-a-peer-to-peer-book-exc-one.vercel.app/",
 });
 
 export const getAllBooks = () => API.get("/books");
