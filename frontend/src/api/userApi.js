@@ -1,8 +1,8 @@
-// frontend/src/api/userApi.js
+
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:5000/api", // change to your backend URL in production
+  baseURL: "https://book-bazaar-a-peer-to-peer-book-exc-one.vercel.app/", 
 });
 
 // Automatically attach token if available
@@ -14,7 +14,7 @@ API.interceptors.request.use((req) => {
   return req;
 });
 
-// ✅ Get user profile (listings + wishlist)
+
 export const getUserProfile = async () => {
   const { data } = await API.get("/users/profile");
   return data;
