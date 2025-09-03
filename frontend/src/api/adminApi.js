@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE = 'http://localhost:5000/api/admin';
+const API_BASE = 'https://book-bazaar-a-peer-to-peer-book-exc-one.vercel.app/';
 
 export const getAdminStats = async (token) => {
   const res = await axios.get(`${API_BASE}/stats`, {
