@@ -1,10 +1,10 @@
-// src/components/BookForm.jsx
+
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 
 const BookForm = ({ books = [] }) => {
-  const { token } = useAuth(); // ✅ get token from context
+  const { token } = useAuth(); 
 
   const [formData, setFormData] = useState({
     title: '',
@@ -35,7 +35,7 @@ const BookForm = ({ books = [] }) => {
 
     try {
       const res = await axios.post(
-        'http://localhost:5000/api/books/create',
+        'https://book-bazaar-a-peer-to-peer-book-exc-one.vercel.app/books/create',
         formData,
         {
           headers: {
