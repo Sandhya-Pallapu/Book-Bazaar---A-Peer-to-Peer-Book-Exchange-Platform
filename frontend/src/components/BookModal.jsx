@@ -79,7 +79,6 @@ const BookModal = ({ onSubmit, onClose, initialData = {} }) => {
           onChange={(e) => setImage(e.target.value)}
         />
 
-        {/* ✅ Added seller name and email inputs */}
         <input
           type="text"
           placeholder="Seller Name"
