@@ -9,7 +9,7 @@ const MyListingsPage = () => {
 
   useEffect(() => {
     const fetchBooks = async () => {
-      const res = await axios.get('http://localhost:5000/api/books/user', {
+      const res = await axios.get('https://book-bazaar-a-peer-to-peer-book-exc-one.vercel.app/api/books/user', {
         headers: { Authorization: `Bearer ${user.token}` },
       });
       setBooks(res.data);
