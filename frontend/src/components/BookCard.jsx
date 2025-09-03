@@ -1,12 +1,12 @@
 // components/BookCard.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
-import HeartButton from './HeartButton'; // import it
+import HeartButton from './HeartButton'; 
 
 const BookCard = ({ book }) => {
   return (
     <div className="relative border p-4 rounded shadow-md bg-white">
-      {/* ❤️ Heart button top-right */}
+      
       <HeartButton book={book} />
 
       <img
