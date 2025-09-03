@@ -10,7 +10,7 @@ const ChatListPage = () => {
   useEffect(() => {
     const fetchChatUsers = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/messages/chat-users', {
+        const res = await axios.get('https://book-bazaar-a-peer-to-peer-book-exc-one.vercel.app/api/messages/chat-users', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -38,7 +38,7 @@ const ChatListPage = () => {
                 to={`/chat/${encodeURIComponent(userEmail)}`}
                 className="block px-4 py-2 border rounded hover:bg-blue-50"
               >
-                💬 {userEmail}
+               
               </Link>
             </li>
           ))}
