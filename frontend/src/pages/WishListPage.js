@@ -17,7 +17,7 @@ const WishListPage = () => {
 
     const fetchWishlist = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/wishlist', {
+        const res = await axios.get('https://book-bazaar-a-peer-to-peer-book-exc-one.vercel.app/api/wishlist', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
