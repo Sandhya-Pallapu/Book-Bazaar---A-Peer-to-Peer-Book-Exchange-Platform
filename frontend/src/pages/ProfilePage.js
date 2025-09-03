@@ -11,7 +11,7 @@ const ProfilePage = () => {
     const fetchProfileData = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:5000/api/users/profile", {
+        const res = await axios.get("https://book-bazaar-a-peer-to-peer-book-exc-one.vercel.app/api/users/profile", {
           headers: { Authorization: `Bearer ${token}` },
         });
 
