@@ -2,8 +2,8 @@
 import axios from 'axios';
 
 const instance = axios.create({
-  baseURL: 'http://localhost:5000', // Your backend URL
-  withCredentials: true, // If you use cookies (optional)
+  baseURL: 'https://book-bazaar-a-peer-to-peer-book-exc-one.vercel.app/', 
+  withCredentials: true, 
 });
 
 export default instance;
