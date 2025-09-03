@@ -18,7 +18,7 @@ const HeartButton = ({ book }) => {
 
     try {
       const res = await axios.post(
-        'http://localhost:5000/api/wishlist/add',
+        ' https://book-bazaar-a-peer-to-peer-book-exc-one.vercel.app/wishlist/add',
         { bookId: book._id },
         {
           headers: {
