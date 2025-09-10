@@ -10,7 +10,7 @@ const ConversationsList = () => {
   useEffect(() => {
     const fetchConversations = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/conversations/${user._id}`, {
+        const res = await axios.get(`http://localhost:5000/${user._id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

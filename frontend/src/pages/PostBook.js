@@ -1,151 +1,135 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import { toast } from 'react-toastify';
 
 const PostBook = () => {
   const { user, token } = useAuth();
-
   const [formData, setFormData] = useState({
     title: '',
     author: '',
     genre: '',
     condition: '',
     price: '',
-    image: '',
     sellerName: '',
     sellerEmail: '',
+    image: '', 
   });
 
-  
-  useEffect(() => {
-    if (user) {
-      setFormData((prev) => ({
-        ...prev,
-        sellerName: user.name || '',
-        sellerEmail: user.email || '',
-      }));
-    }
-  }, [user]);
+  const [imageFile, setImageFile] = useState(null);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value, files } = e.target;
+    if (name === 'image') {
+      if (files && files[0]) {
+        setImageFile(files[0]);
+        setFormData({ ...formData, image: '' }); 
+      } else {
+        setFormData({ ...formData, image: value });
+        setImageFile(null); 
+      }
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(
-        '/api/books/create',
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+     
+      let payload;
+      let headers = { Authorization: `Bearer ${token}` };
+
+      if (imageFile) {
+        payload = new FormData();
+        Object.keys(formData).forEach((key) => payload.append(key, formData[key]));
+        payload.append('image', imageFile);
+        headers['Content-Type'] = 'multipart/form-data';
+      } else {
+        payload = formData; 
+      }
+
+      const res = await axios.post(
+        'http://localhost:5000/api/books/create',
+        payload,
+        { headers }
       );
 
-      console.log(' Book posted:', response.data);
-      alert('Book posted successfully!');
-    } catch (error) {
-      console.error(' Error posting book:', error);
-      alert('Failed to post book. Try again.');
+      console.log('Book posted:', res.data);
+      toast.success('Book posted successfully!');
+      setFormData({
+        title: '',
+        author: '',
+        genre: '',
+        condition: '',
+        price: '',
+        sellerName: '',
+        sellerEmail: '',
+        image: '',
+      });
+      setImageFile(null);
+    } catch (err) {
+      console.error('Error posting book:', err);
+      toast.error(err.response?.data?.message || 'Failed to post book');
     }
   };
 
   return (
-    <div className="max-w-xl mx-auto p-6 bg-white shadow-md rounded-lg mt-10">
-      <h2 className="text-2xl font-bold mb-4">Post a Book</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="text"
-          name="title"
-          placeholder="Book Title"
-          value={formData.title}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-          required
-        />
+    <div className="min-h-screen bg-slate-100 flex justify-center items-center px-6 pt-20">
+      <div className="bg-white rounded-2xl shadow-lg w-full max-w-md p-8">
+        <h1 className="text-3xl font-bold text-slate-800 text-center mb-6">Post a Book</h1>
 
-        <input
-          type="text"
-          name="author"
-          placeholder="Author"
-          value={formData.author}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-          required
-        />
+        <form onSubmit={handleSubmit} className="space-y-5">
+          {['title', 'author', 'genre', 'condition', 'price', 'sellerName', 'sellerEmail'].map(
+            (field) => (
+              <div key={field}>
+                <input
+                  type={field === 'price' ? 'number' : 'text'}
+                  name={field}
+                  placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
+                  value={formData[field]}
+                  onChange={handleChange}
+                  className="w-full p-3 rounded-lg bg-slate-50 text-slate-800 placeholder-slate-400 border border-slate-300 focus:border-sky-500 focus:ring focus:ring-sky-200 focus:outline-none transition"
+                  required
+                />
+              </div>
+            )
+          )}
 
-        <input
-          type="text"
-          name="genre"
-          placeholder="Genre"
-          value={formData.genre}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-          required
-        />
+          <div>
+            <input
+              type="text"
+              name="image"
+              placeholder="Image URL"
+              value={formData.image}
+              onChange={handleChange}
+              className="w-full p-3 mb-2 rounded-lg bg-slate-50 text-slate-800 placeholder-slate-400 border border-slate-300 focus:border-sky-500 focus:ring focus:ring-sky-200 focus:outline-none transition"
+            />
+            <input
+              type="file"
+              name="image"
+              accept="image/*"
+              onChange={handleChange}
+              className="w-full p-2 rounded-lg bg-slate-50 border border-slate-300 focus:border-sky-500 focus:ring focus:ring-sky-200"
+            />
+          </div>
 
-        <input
-          type="text"
-          name="condition"
-          placeholder="Condition (New/Used)"
-          value={formData.condition}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-          required
-        />
-
-        <input
-          type="number"
-          name="price"
-          placeholder="Price"
-          value={formData.price}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-          required
-        />
-
-        <input
-          type="text"
-          name="image"
-          placeholder="Image URL (optional)"
-          value={formData.image}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-        />
-
-        
-        <input
-          type="text"
-          name="sellerName"
-          placeholder="Your Name"
-          value={formData.sellerName}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-          required
-        />
-
-        <input
-          type="email"
-          name="sellerEmail"
-          placeholder="Your Email"
-          value={formData.sellerEmail}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-          required
-        />
-
-        <button
-          type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-yellow-700"
-        >
-          Post Book
-        </button>
-      </form>
+          <button
+            type="submit"
+            className="w-full bg-sky-600 hover:bg-sky-700 text-white font-semibold py-3 rounded-lg shadow transition"
+          >
+            Post Book
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
 
 export default PostBook;
+
+
+
+
+

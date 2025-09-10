@@ -1,11 +1,10 @@
-// src/components/BookForm.jsx
+
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 
 const BookForm = ({ books = [] }) => {
-  const { token } = useAuth(); // ✅ get token from context
-
+  const { token } = useAuth(); 
   const [formData, setFormData] = useState({
     title: '',
     author: '',
@@ -35,7 +34,7 @@ const BookForm = ({ books = [] }) => {
 
     try {
       const res = await axios.post(
-        'http://localhost:5000/api/books/create',
+        "http://localhost:5000/api/books/create",
         formData,
         {
           headers: {
@@ -128,7 +127,7 @@ const BookForm = ({ books = [] }) => {
   onChange={(e) => setFormData({ ...formData, sellerEmail: e.target.value })}
 />
 
-      <button
+    <button
         type="submit"
         className="bg-blue-500 text-white px-4 py-2 rounded"
       >

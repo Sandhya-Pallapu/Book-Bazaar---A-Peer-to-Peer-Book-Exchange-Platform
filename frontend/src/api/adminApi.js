@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE = 'http://localhost:5000/api/admin';
+const API_BASE = 'https://book-bazaar-mern-backend.onrender.com/api/admin';
 
 export const getAdminStats = async (token) => {
   const res = await axios.get(`${API_BASE}/stats`, {

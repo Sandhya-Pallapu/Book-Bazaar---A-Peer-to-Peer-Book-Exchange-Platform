@@ -9,6 +9,7 @@ const HeartButton = ({ book }) => {
   const { user, token } = useAuth();
   const navigate = useNavigate();
   const [added, setAdded] = useState(false);
+  const BACKEND_URL = process.env.REACT_APP_API_URL;
 
   const handleWishlist = async () => {
     if (!user || !token) {
@@ -16,9 +17,14 @@ const HeartButton = ({ book }) => {
       return;
     }
 
+    if (!book || !book._id) {
+      toast.error("Book data is invalid.");
+      return;
+    }
+
     try {
       const res = await axios.post(
-        'http://localhost:5000/api/wishlist/add',
+        `${BACKEND_URL}/wishlist/add`,
         { bookId: book._id },
         {
           headers: {
@@ -46,7 +52,7 @@ const HeartButton = ({ book }) => {
   return (
     <button
       onClick={handleWishlist}
-      className="absolute top-2 right-2 text-xl transition-transform hover:scale-110"
+      className="text-xl transition-transform hover:scale-110"
     >
       {added ? <FaHeart className="text-red-500" /> : <FaRegHeart className="text-red-500" />}
     </button>
@@ -54,3 +60,5 @@ const HeartButton = ({ book }) => {
 };
 
 export default HeartButton;
+
+

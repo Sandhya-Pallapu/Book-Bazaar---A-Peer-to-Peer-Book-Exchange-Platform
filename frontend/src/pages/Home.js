@@ -7,7 +7,6 @@ import BookCard from "../components/BookCard";
 const Home = () => {
   const [books, setBooks] = useState([]);
   const [filteredBooks, setFilteredBooks] = useState([]);
-
   const [searchQuery, setSearchQuery] = useState("");
   const [filters, setFilters] = useState({
     genre: "",
@@ -15,14 +14,22 @@ const Home = () => {
     minPrice: "",
     maxPrice: "",
   });
+  const [loading, setLoading] = useState(true);
 
   const fetchBooks = async () => {
     try {
-      const res = await axios.get("/api/books");
-      setBooks(res.data);
-      setFilteredBooks(res.data);
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/books`);
+      const booksArray = Array.isArray(res.data)
+        ? res.data
+        : res.data.books || [];
+      setBooks(booksArray);
+      setFilteredBooks(booksArray);
     } catch (err) {
       console.error("Error fetching books:", err);
+      setBooks([]);
+      setFilteredBooks([]);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -30,7 +37,6 @@ const Home = () => {
     fetchBooks();
   }, []);
 
- 
   useEffect(() => {
     let updatedBooks = [...books];
 
@@ -41,9 +47,7 @@ const Home = () => {
     }
 
     if (filters.genre) {
-      updatedBooks = updatedBooks.filter(
-        (book) => book.genre === filters.genre
-      );
+      updatedBooks = updatedBooks.filter((book) => book.genre === filters.genre);
     }
 
     if (filters.condition) {
@@ -75,26 +79,39 @@ const Home = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row px-4 md:px-8 gap-4 mt-4">
+  <div className="min-h-screen bg-gray-50 px-4 md:px-8 py-6">
 
-      <div className="w-full md:w-1/4 pr-2">
-        <FilterPanel filters={filters} onFilterChange={handleFilterChange} />
-      </div>
-
-   
-      <div className="flex-1">
-   
-        <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
 
  
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-          {filteredBooks.length > 0 ? (
-            filteredBooks.map((book) => <BookCard key={book._id} book={book} />)
-          ) : (
-            <p className="col-span-full text-center text-gray-600">
-              No books found.
-            </p>
-          )}
+
+      <div className="flex flex-col md:flex-row gap-6">
+        
+
+        <div className="w-full md:w-1/4">
+          <FilterPanel filters={filters} onFilterChange={handleFilterChange} />
+        </div>
+
+      
+        <div className="flex-1">
+          <div className="mb-6">
+            <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {loading ? (
+              <p className="col-span-full text-center text-gray-600">
+                Loading books...
+              </p>
+            ) : Array.isArray(filteredBooks) && filteredBooks.length > 0 ? (
+              filteredBooks.map((book) => (
+                <BookCard key={book._id} book={book} />
+              ))
+            ) : (
+              <p className="col-span-full text-center text-gray-600">
+                No books found.
+              </p>
+            )}
+          </div>
         </div>
       </div>
     </div>
@@ -102,5 +119,6 @@ const Home = () => {
 };
 
 export default Home;
+
 
 
