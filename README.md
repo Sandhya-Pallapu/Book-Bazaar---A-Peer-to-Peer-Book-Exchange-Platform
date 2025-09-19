@@ -51,13 +51,13 @@ The platform provides authentication, book listings, search & filter functionali
 - bcrypt for password hashing  
 
 **Database:**  
-- MongoDB (Mongoose ODM)  
+- MongoDB   
 
 **Deployment:**  
 - Frontend → Vercel  
-- Backend → Render / AWS EC2  
-- Documentation → JSDoc + Vercel  
+- Backend → Render
 
----
+
+
 
 
